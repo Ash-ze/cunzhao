@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>寸照 · 免费证件照排版</title>
+    <meta name="description" content="在浏览器里做证件照：换底色、一寸二寸社保卡、教资、签证等 19 种规格、手机自拍、6 寸相纸排版和一寸二寸混排、压缩到指定 KB。照片不上传，完全本地处理，开源免费。" />
+    <meta name="theme-color" content="#438edb" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="寸照" />
+    <meta property="og:title" content="寸照 · 免费证件照排版" />
+    <meta property="og:description" content="换底色、裁一寸二寸签证规格、排版到 6 寸相纸、压缩到指定 KB。照片只在浏览器本地处理，不上传，开源免费。" />
+    <meta property="og:url" content="https://ash-ze.github.io/cunzhao/" />
+    <meta property="og:image" content="https://ash-ze.github.io/cunzhao/og.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:locale" content="zh_CN" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="寸照 · 免费证件照排版" />
+    <meta name="twitter:description" content="换底色、裁规格、排版打印、压缩 KB，照片不上传。" />
+    <meta name="twitter:image" content="https://ash-ze.github.io/cunzhao/og.png" />
+    <link rel="icon" href="icon.svg" type="image/svg+xml" />
+    <link rel="manifest" href="manifest.webmanifest" />
+    <link rel="stylesheet" href="/src/style.css" />
+  </head>
+  <body>
+    <header>
+      <h1><img src="icon.svg" alt="" width="28" height="28" /> 寸照</h1>
+      <p>证件照换底色、裁尺寸、排版打印。照片只在你的浏览器里处理，不会上传。</p>
+    </header>
+
+    <main>
+      <section class="panel controls">
+        <div class="step">
+          <h2>① 选照片</h2>
+          <label class="drop" id="drop">
+            <input type="file" id="file" accept="image/*" hidden />
+            <span id="dropText">点这里选照片，或把照片拖进来<br /><small>也可以直接粘贴截图</small></span>
+          </label>
+          <label class="btn cam" id="camBtn">
+            <input type="file" id="camera" accept="image/*" capture="user" hidden />
+            用前置摄像头自拍
+          </label>
+          <details class="tips">
+            <summary>怎样拍出合格的证件照？</summary>
+            <ul>
+              <li>站在白墙或浅色纯色墙前，人离墙半米以上，避免身后有影子</li>
+              <li>面向窗户用自然光，别让顶灯或侧光在脸上打出阴影</li>
+              <li>手机举到和眼睛一样高，正对镜头，离脸一臂远；最好请别人用后置摄像头拍，更清晰</li>
+              <li>头发别挡住眉毛和耳朵，摘掉帽子；戴眼镜注意镜片不要反光</li>
+              <li>衣服颜色别和底色一样：白底别穿白衣服，蓝底别穿蓝衣服</li>
+              <li>表情自然、嘴巴闭合，肩膀放平，多拍几张挑最好的</li>
+            </ul>
+          </details>
+        </div>
+
+        <div class="step">
+          <h2>② 规格</h2>
+          <div class="spec-bar">
+            <div class="tabs" id="specTabs" role="tablist"></div>
+            <input type="search" id="specSearch" placeholder="搜索：社保、教资、签证…" aria-label="搜索规格" />
+          </div>
+          <div class="chips" id="specs"></div>
+          <p class="hint" id="specEmpty" hidden>没有找到，试试下面的自定义尺寸。</p>
+          <div class="spec-note" id="specNote"></div>
+          <details class="custom">
+            <summary>自定义尺寸</summary>
+            <div class="row">
+              <label>宽 <input type="number" id="cw" min="10" max="200" value="25" /> mm</label>
+              <label>高 <input type="number" id="ch" min="10" max="200" value="35" /> mm</label>
+              <button id="applyCustom" type="button">使用</button>
+            </div>
+          </details>
+        </div>
+
+        <div class="step">
+          <h2>③ 底色</h2>
+          <div class="chips" id="bgs"></div>
+          <p class="hint" id="bgHint"></p>
+        </div>
+
+        <div class="step">
+          <h2>④ 调整</h2>
+          <label class="slider">大小 <input type="range" id="zoom" min="0.6" max="1.6" step="0.01" value="1" /></label>
+          <label class="slider">亮度 <input type="range" id="bright" min="-40" max="40" step="1" value="0" /></label>
+          <label class="slider">对比 <input type="range" id="contrast" min="-40" max="40" step="1" value="0" /></label>
+          <div class="row nudge" aria-label="微调位置">
+            <span>位置</span>
+            <button type="button" data-nudge="0,-1" title="上移（方向键 ↑）">↑</button>
+            <button type="button" data-nudge="0,1" title="下移（方向键 ↓）">↓</button>
+            <button type="button" data-nudge="-1,0" title="左移（方向键 ←）">←</button>
+            <button type="button" data-nudge="1,0" title="右移（方向键 →）">→</button>
+          </div>
+          <p class="hint">在预览里拖动照片移动位置，滚轮或滑块调大小；方向键微调（按住 Shift 移得更多），Ctrl+Z 撤销。</p>
+          <div class="row">
+            <button type="button" id="autoFit">重新自动对齐</button>
+            <button type="button" id="undo" disabled>撤销</button>
+            <button type="button" id="resetTone">亮度对比复原</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel preview">
+        <div class="stage">
+          <div class="frame">
+            <canvas id="photo" width="295" height="413" tabindex="0" aria-label="证件照预览，可拖动或用方向键调整位置"></canvas>
+            <div class="guides" id="guides" hidden>
+              <div class="g-top"><span>头顶</span></div>
+              <div class="g-chin"><span>下巴</span></div>
+            </div>
+          </div>
+          <div class="busy" id="busy" hidden><span></span><em id="busyText">处理中…</em></div>
+        </div>
+        <p class="meta" id="meta">还没有照片</p>
+
+        <div class="step">
+          <h2>⑤ 下载</h2>
+          <div class="row">
+            <button type="button" class="primary" id="dlSingle" disabled>下载单张</button>
+            <label class="kb">限制大小 <input type="number" id="maxKb" min="10" max="2000" placeholder="不限" /> KB</label>
+          </div>
+          <div class="row">
+            <select id="paper" aria-label="相纸"></select>
+            <button type="button" class="primary" id="dlLayout" disabled>下载排版</button>
+          </div>
+          <p class="hint" id="layoutHint"></p>
+          <canvas id="layoutPreview" class="layout-preview" hidden></canvas>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      开源免费 · 无广告 · 不上传照片。打印排版图时请选择「实际大小 / 100%」，不要「适应纸张」。
+    </footer>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

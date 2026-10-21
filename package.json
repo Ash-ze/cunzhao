@@ -1,0 +1,22 @@
+{
+  "name": "cunzhao",
+  "version": "1.0.0",
+  "description": "免费开源的证件照工具：换底色、常用规格、排版打印，照片只在浏览器本地处理",
+  "scripts": {
+    "predev": "node scripts/fetch-assets.mjs",
+    "dev": "vite",
+    "prebuild": "node scripts/fetch-assets.mjs",
+    "build": "vite build",
+    "preview": "vite preview",
+    "test": "node --test test/*.test.js"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "vite": "^6.4.4"
+  },
+  "dependencies": {
+    "@mediapipe/tasks-vision": "^1.1.1"
+  },
+  "private": true,
+  "type": "module"
+}
