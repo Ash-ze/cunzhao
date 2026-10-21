@@ -1,5 +1,5 @@
 // 缓存优先：模型和 wasm 体积大，下载一次后离线也能用
-const CACHE = 'cunzhao-v2';
+const CACHE = 'cunzhao-v3';
 self.addEventListener('install', () => self.skipWaiting());
 self.addEventListener('activate', (e) => {
   e.waitUntil(
